@@ -10,6 +10,8 @@ class PreceptorAdmin(admin.ModelAdmin):
         'login',
         'senha',
         'nome',
+        'email',
+        'ocupacao',
     ]
 
 
@@ -59,12 +61,14 @@ class RespostaAdmin(admin.ModelAdmin):
         'libras',
         'audioDescricao',
         'descricao',
+        'escolhida',
         'card',
     ]
 
 @admin.register(Atendimento)
 class AtendimentoAdmin(admin.ModelAdmin):
     list_display = [
+        'ativo',
         'preceptor',
         'paciente',
         'roteiro',

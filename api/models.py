@@ -11,6 +11,7 @@ class Usuario(models.Model):
     ativo = models.BooleanField(default=True)
     login = models.CharField(blank=False, max_length=255)
     senha = models.CharField(blank=False, max_length=255)
+    email = models.EmailField(blank=False, default='')
 
     class Meta:
         abstract = True
@@ -107,6 +108,7 @@ class Card(ElementoComunicativo):
 # uma lista de respostas dentro de um card
 class Resposta(ElementoComunicativo):
     descricao = models.CharField(blank=False, max_length=255)
+    escolhida = models.BooleanField(default=False)
     card = models.ForeignKey(
         Card,
         related_name='resposta_cards',
@@ -122,6 +124,7 @@ class Resposta(ElementoComunicativo):
 
 # um preceptor aplicando um roteiro de comunicação com um paciente
 class Atendimento(models.Model):
+    ativo = models.BooleanField(default=True)
     preceptor = models.ForeignKey(
         Preceptor,
         related_name='atendimento_preceptores',
@@ -140,6 +143,6 @@ class Atendimento(models.Model):
 
     class Meta:
         ordering = ['id']
-        verbose_name = 'roteiro'
-        verbose_name_plural = 'roteiros'
+        verbose_name = 'atendimento'
+        verbose_name_plural = 'atendimento'
         unique_together = ['preceptor', 'paciente', 'roteiro']
