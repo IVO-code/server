@@ -119,7 +119,7 @@ class RespostaSerializer(serializers.ModelSerializer):
         ]
 
 
-class AtendimentoSerializer(serializers.ModelSerializer):
+class PacienteSerializer(serializers.ModelSerializer):
 
     atendimentos = serializers.Hyperlink(
         many=True,
@@ -128,7 +128,7 @@ class AtendimentoSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Atendimento
+        model = Paciente
         fields = [
             'id',
             'ativo',
@@ -148,3 +148,4 @@ class AtendimentoSerializer(serializers.ModelSerializer):
             'paciente',
             'roteiro',
         ]
+
