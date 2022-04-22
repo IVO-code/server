@@ -63,10 +63,10 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd1u34m97lp2vd2',
-        'USER': 'eeqiqfqbmlrnps',
-        'PASSWORD': '90880aa01caa8d27fdb99dd13013c73f671986561956c3f5ab741da85e9acf86',
-        'HOST': 'ec2-34-197-84-74.compute-1.amazonaws.com',
+        'NAME': 'df088mulp3cj7s',
+        'USER': 'pmgdtrpucbjgnq',
+        'PASSWORD': 'd57f9fcb7901f3358c621772750b6a8d82de8271db38f56d5fc25431b59742fc',
+        'HOST': 'ec2-34-194-158-176.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -121,3 +121,6 @@ REST_FRAMEWORK = {
         'user': '10/minute'
     }
 }
+
+AUTH_USER_MODEL = 'api.Preceptor'
+

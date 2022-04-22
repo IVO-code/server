@@ -1,37 +1,14 @@
 from rest_framework import serializers
 
-from .models import Atendimento, Card, Ocupacao, Paciente, Preceptor, Roteiro, Resposta
-
-
-class OcupacaoSerializer(serializers.ModelSerializer):
-
-    preceptores = serializers.Hyperlink(
-        many=True,
-        read_only=True,
-        view_name='preceptor-detail'
-    )
-
-    class Meta:
-        model = Ocupacao
-        fields = [
-            'id',
-            'nome',
-            'preceptores'
-        ]
+from .models import Atendimento, Card, Paciente, Preceptor, Roteiro, ElementoComunicativo
 
 
 class PreceptorSerializer(serializers.ModelSerializer):
 
-    roteiros = serializers.Hyperlink(
+    elementos_comunicativos = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
-        view_name='roteiro-detail'
-    )
-
-    atendimentos = serializers.Hyperlink(
-        many=True,
-        read_only=True,
-        view_name='atendimento-detail'
+        view_name='elemento-detail'
     )
 
     class Meta:
@@ -39,89 +16,95 @@ class PreceptorSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'ocupacao',
-            'ativo',
-            'login',
-            'senha',
-            'nome',
+            'username',
             'email',
-            'roteiros',
-            'atendimentos',
+            'elementos_comunicativos'
         ]
-        extra_kargs = {
-            'senha': {'write_only': True},
-        }
 
 
-class RoteiroSerializer(serializers.ModelSerializer):
-
-    cards = serializers.Hyperlink(
-        many=True,
-        read_only=True,
-        view_name='card-detail'
-    )
-
-    atendimentos = serializers.Hyperlink(
-        many=True,
-        read_only=True,
-        view_name='atendimento-detail'
-    )
+class ElementoComunicativoSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Roteiro
+        model = ElementoComunicativo
         fields = [
-            'id'
+            'id',
             'preceptor',
             'ativo',
-            'titulo',
-            'descricao',
-            'cards'
-            'atendimentos'
+            'texto',
+            'figura',
+            'libras',
+            'audioDescricao',
+            'data'
         ]
 
 
 class CardSerializer(serializers.ModelSerializer):
 
-    respostas = serializers.Hyperlink(
+    titulo = serializers.HyperlinkedRelatedField(
+        many=False,
+        read_only=True,
+        view_name='elemento-detail'
+    )
+
+    descricao = serializers.HyperlinkedRelatedField(
+        many=False,
+        read_only=True,
+        view_name='elemento-detail'
+    )
+
+    opcoes = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
-        view_name='resposta-detail'
+        view_name='elemento-detail'
     )
 
     class Meta:
         model = Card
         fields = [
             'id',
-            'roteiro',
             'ativo',
-            'texto',
-            'figura',
-            'libras',
-            'audioDescricao',
+            'data',
             'titulo',
-            'respostas'
+            'descricao',
+            'opcoes'
         ]
 
 
-class RespostaSerializer(serializers.ModelSerializer):
+class RoteiroSerializer(serializers.ModelSerializer):
+
+    titulo = serializers.HyperlinkedRelatedField(
+        many=False,
+        read_only=True,
+        view_name='elemento-detail'
+    )
+
+    descricao = serializers.HyperlinkedRelatedField(
+        many=False,
+        read_only=True,
+        view_name='elemento-detail'
+    )
+
+    cards = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='card-detail'
+    )
 
     class Meta:
-        model = Resposta
+        model = Roteiro
         fields = [
             'id',
-            'card',
             'ativo',
-            'texto',
-            'figura',
-            'libras',
-            'audioDescricao',
+            'titulo',
+            'data',
             'descricao',
-            'escolhida',
+            'cards'
         ]
 
 
 class PacienteSerializer(serializers.ModelSerializer):
 
-    atendimentos = serializers.Hyperlink(
+    atendimentos = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
         view_name='atendimento-detail'
@@ -143,9 +126,9 @@ class AtendimentoSerializer(serializers.ModelSerializer):
         model = Atendimento
         fields = [
             'id',
-            'ativo',
-            'preceptor',
+            'texto',
+            'data',
             'paciente',
-            'roteiro',
+            'card',
+            'opcao'
         ]
-
