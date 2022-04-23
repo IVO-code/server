@@ -1,3 +1,6 @@
+import email
+from abc import ABC
+from sre_constants import SRE_INFO_LITERAL
 from rest_framework import serializers
 
 from .models import Atendimento, Card, Paciente, Preceptor, Roteiro, ElementoComunicativo
@@ -21,6 +24,10 @@ class PreceptorSerializer(serializers.ModelSerializer):
             'elementos_comunicativos'
         ]
 
+class AutenticacaoSerializer(serializers.Serializer):
+    usuario = serializers.CharField()
+    email = serializers.EmailField()
+    senha = serializers.CharField()
 
 class ElementoComunicativoSerializer(serializers.ModelSerializer):
 
@@ -132,3 +139,6 @@ class AtendimentoSerializer(serializers.ModelSerializer):
             'card',
             'opcao'
         ]
+
+
+

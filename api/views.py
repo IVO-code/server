@@ -1,47 +1,66 @@
-from rest_framework.response import Response
+from django.contrib.auth import authenticate
+
+from rest_framework.authtoken.models import Token
+
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from rest_framework import status
-"""
-from api.serializers import PreceptorSerializer
 
 from .models import Atendimento, Card, Paciente, Preceptor, Roteiro
+from .serializers import PreceptorSerializer, CardSerializer, RoteiroSerializer, AtendimentoSerializer, ElementoComunicativoSerializer, PacienteSerializer, AutenticacaoSerializer
+
+@api_view(['POST'])
+def login(request, format=None):
+
+    if request.method == 'POST':
+        login = AutenticacaoSerializer(request.data)
+        Usuarioresultado = authenticate(username=login.data['usuario'], password=login.data['senha'])
+        if Usuarioresultado is not None:
+            token = Token.objects.get_or_create(user=Usuarioresultado)
+            return Response({"token": token[0].key}, status=status.HTTP_202_ACCEPTED)
+        else: return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+    else: return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
-def preceptores_CR(self, request, format=None):
+def preceptor_CR(request, format=None):
+
     if request.method == 'GET':
         preceptores = Preceptor.objects.all()
-        serializer = PreceptorSerializer(preceptores, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serilizer = PreceptorSerializer(preceptores, many=True)
+        return Response(serilizer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
-        serializer = PreceptorSerializer(data=request.data)
-        if serializer.is_valid(reaise_exeption=True):
+        serializer = PreceptorSerializer(request.data)
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    else: Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def preceptores_RUD(self, request, preceptor_pk=None, format=None):
+def preceptor_RUD(request, preceptor_pk, format=None):
     try:
         preceptor = Preceptor.objects.get(pk=preceptor_pk)
-    except preceptor.DoesNotExist:
-        return Response(status.HTTP_400_BAD_REQUEST)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'GET':
-        serializer = PreceptorSerializer(data=preceptor)
+        serializer = PreceptorSerializer(preceptor)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         serializer = PreceptorSerializer(request.data)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else: return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         preceptor.delete()
-        return Response(status=status.HTTP_200_OKs)
-"""
+        return Response(status=status.HTTP_202_ACCEPTED)
+
+    else: return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
