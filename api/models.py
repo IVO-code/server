@@ -36,7 +36,8 @@ class ElementoComunicativo(models.Model):
     preceptor = models.ForeignKey(
         Preceptor,
         related_name='elemento_preceptor',
-        on_delete=models.DO_NOTHING
+        on_delete=models.SET_NULL,
+        null=True
     )
 
     class Meta:

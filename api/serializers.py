@@ -3,13 +3,14 @@ from rest_framework import serializers
 from .models import Atendimento, Card, Paciente, Preceptor, Roteiro, ElementoComunicativo
 
 
+class AutenticacaoSerializer(serializers.Serializer):
+    usuario = serializers.CharField()
+    email = serializers.EmailField()
+    senha = serializers.CharField()
+
+
 class PreceptorSerializer(serializers.ModelSerializer):
 
-    elementos_comunicativos = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='elementoComunicativo-detail'
-    )
 
     class Meta:
         model = Preceptor
@@ -18,13 +19,10 @@ class PreceptorSerializer(serializers.ModelSerializer):
             'ocupacao',
             'username',
             'email',
-            'elementos_comunicativos'
+            'password'
         ]
+        extra_kwargs = {'password': {'write_only': True}}
 
-class AutenticacaoSerializer(serializers.Serializer):
-    usuario = serializers.CharField()
-    email = serializers.EmailField()
-    senha = serializers.CharField()
 
 class ElementoComunicativoSerializer(serializers.ModelSerializer):
 
