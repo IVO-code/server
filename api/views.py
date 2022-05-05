@@ -33,8 +33,27 @@ class PreceptorViewSet(viewsets.ModelViewSet):
     queryset = Preceptor.objects.all()
     serializer_class = PreceptorSerializer
     
-    
+
 class ElementoComunicativoViewSet(viewsets.ModelViewSet):
     queryset = ElementoComunicativo.objects.all()
     serializer_class = ElementoComunicativoSerializer
 
+
+class CardViewSet(viewsets.ModelViewSet):
+    queryset = Card.objects.all()
+    serializer_class = CardSerializer
+
+
+class RoteiroViewSet(viewsets.ModelViewSet):
+    queryset = Roteiro.objects.all()
+    serializer_class = RoteiroSerializer
+
+
+class AtendimentoViewSet(viewsets.ModelViewSet):
+    queryset = Atendimento.objects.all()
+    serializer_class = AtendimentoSerializer
+
+
+class PacienteViewSet(viewsets.ModelViewSet):
+    queryset = Paciente.objects.all()
+    serializer_class = PacienteSerializer
