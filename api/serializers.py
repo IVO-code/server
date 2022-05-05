@@ -1,6 +1,3 @@
-import email
-from abc import ABC
-from sre_constants import SRE_INFO_LITERAL
 from rest_framework import serializers
 
 from .models import Atendimento, Card, Paciente, Preceptor, Roteiro, ElementoComunicativo
@@ -11,7 +8,7 @@ class PreceptorSerializer(serializers.ModelSerializer):
     elementos_comunicativos = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
-        view_name='elemento-detail'
+        view_name='elementoComunicativo-detail'
     )
 
     class Meta:
