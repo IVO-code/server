@@ -11,6 +11,7 @@ class AutenticacaoSerializer(serializers.Serializer):
 
 class PreceptorSerializer(serializers.ModelSerializer):
 
+    elementos_comunicativos = serializers.SerializerMethodField()
 
     class Meta:
         model = Preceptor
@@ -19,10 +20,19 @@ class PreceptorSerializer(serializers.ModelSerializer):
             'ocupacao',
             'username',
             'email',
-            'password'
+            'password',
+            'elementos_comunicativos'
         ]
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
+    def get_elementos_comunicativos(self, obj): 
+        elementos_preceptor = []
+        elementos = ElementoComunicativo.objects.filter(preceptor_id=obj.id)
+        for elemento in elementos:
+            elementos_preceptor.append(f'http://127.0.0.1:8000/api/elementos/{elemento.id}/')
+        return elementos_preceptor
 
 class ElementoComunicativoSerializer(serializers.ModelSerializer):
 
