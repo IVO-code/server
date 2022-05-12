@@ -65,7 +65,10 @@ class Card(models.Model):
         on_delete=models.DO_NOTHING
     )
 
-    opcoes = models.ManyToManyField(ElementoComunicativo)
+    opcoes = models.ManyToManyField(
+        ElementoComunicativo,
+        related_name='card_opcao'
+    )
 
     class Meta:
         ordering = ['id']
@@ -93,7 +96,8 @@ class Roteiro(models.Model):
     )
 
     cards = models.ManyToManyField(
-        Card
+        Card,
+        related_name='roteiro_cards'
     )
 
     class Meta:
@@ -127,7 +131,10 @@ class Atendimento(models.Model):
 
     card = models.ManyToManyField(Card)
 
-    opcao = models.ManyToManyField(ElementoComunicativo)
+    opcao = models.ManyToManyField(
+        ElementoComunicativo,
+        related_name='atendimento_opcao'
+    )
 
     class Meta:
         ordering = ['id']

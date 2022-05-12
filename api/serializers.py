@@ -34,6 +34,7 @@ class PreceptorSerializer(serializers.ModelSerializer):
             elementos_preceptor.append(f'http://127.0.0.1:8000/api/elementos/{elemento.id}/')
         return elementos_preceptor
 
+
 class ElementoComunicativoSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -52,23 +53,11 @@ class ElementoComunicativoSerializer(serializers.ModelSerializer):
 
 class CardSerializer(serializers.ModelSerializer):
 
-    titulo = serializers.HyperlinkedRelatedField(
-        many=False,
-        read_only=True,
-        view_name='elemento-detail'
-    )
+    titulo = serializers.SerializerMethodField()
 
-    descricao = serializers.HyperlinkedRelatedField(
-        many=False,
-        read_only=True,
-        view_name='elemento-detail'
-    )
+    descricao = serializers.SerializerMethodField()
 
-    opcoes = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='elemento-detail'
-    )
+    opcoes = serializers.SerializerMethodField()
 
     class Meta:
         model = Card
@@ -80,27 +69,33 @@ class CardSerializer(serializers.ModelSerializer):
             'descricao',
             'opcoes'
         ]
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'ativo': {'read_only': True},
+            'data': {'read_only': True}
+        }
+    
+    def get_titulo(self, obj):
+        elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
+        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
+
+    def get_descricao(self, obj):
+        elemento = ElementoComunicativo.objects.filter(id=obj.descricao_id).first()
+        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
+
+    def get_opcoes(self, obj):
+        pass
+
+    
 
 
 class RoteiroSerializer(serializers.ModelSerializer):
 
-    titulo = serializers.HyperlinkedRelatedField(
-        many=False,
-        read_only=True,
-        view_name='elemento-detail'
-    )
+    titulo = serializers.SerializerMethodField()
 
-    descricao = serializers.HyperlinkedRelatedField(
-        many=False,
-        read_only=True,
-        view_name='elemento-detail'
-    )
+    descricao = serializers.SerializerMethodField()
 
-    cards = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='card-detail'
-    )
+    opcoes = serializers.SerializerMethodField()
 
     class Meta:
         model = Roteiro
