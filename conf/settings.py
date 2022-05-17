@@ -11,7 +11,8 @@ DEBUG = True
 # TODO adicionar host do heroku ('amigos-do-produtor.herokuapp.com')
 ALLOWED_HOSTS = [
     '0.0.0.0',
-    '127.0.0.1'
+    '127.0.0.1',
+    '10.0.2.2' 
 ]
 
 INSTALLED_APPS = [
