@@ -85,9 +85,7 @@ class CardSerializer(serializers.ModelSerializer):
 
     def get_opcoes(self, obj):
         pass
-
     
-
 
 class RoteiroSerializer(serializers.ModelSerializer):
 
