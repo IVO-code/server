@@ -27,11 +27,12 @@ class PreceptorSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
-    def get_elementos_comunicativos(self, obj): 
+    def get_elementos_comunicativos(self, obj):
         elementos_preceptor = []
         elementos = ElementoComunicativo.objects.filter(preceptor_id=obj.id)
         for elemento in elementos:
-            elementos_preceptor.append(f'http://127.0.0.1:8000/api/elementos/{elemento.id}/')
+            elementos_preceptor.append(
+                f'http://127.0.0.1:8000/api/elementos/{elemento.id}/')
         return elementos_preceptor
 
 
@@ -74,7 +75,7 @@ class CardSerializer(serializers.ModelSerializer):
             'ativo': {'read_only': True},
             'data': {'read_only': True}
         }
-    
+
     def get_titulo(self, obj):
         elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
         return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
@@ -84,8 +85,12 @@ class CardSerializer(serializers.ModelSerializer):
         return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
 
     def get_opcoes(self, obj):
-        pass
-    
+        final_opcoes = []
+        opcoes = ElementoComunicativo.objects.filter(card_opcao__id=obj.id)
+        for opcao in opcoes:
+            final_opcoes.append(f'http://127.0.0.1:8000/api/elementos/{opcao.id}/')
+        return final_opcoes
+
 
 class RoteiroSerializer(serializers.ModelSerializer):
 
@@ -137,6 +142,3 @@ class AtendimentoSerializer(serializers.ModelSerializer):
             'card',
             'opcao'
         ]
-
-
-
