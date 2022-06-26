@@ -19,6 +19,7 @@ class PreceptorSerializer(serializers.ModelSerializer):
             'id',
             'ocupacao',
             'username',
+            'avatar',
             'email',
             'password',
             'elementos_comunicativos'
@@ -31,8 +32,7 @@ class PreceptorSerializer(serializers.ModelSerializer):
         elementos_preceptor = []
         elementos = ElementoComunicativo.objects.filter(preceptor_id=obj.id)
         for elemento in elementos:
-            elementos_preceptor.append(
-                f'http://127.0.0.1:8000/api/elementos/{elemento.id}/')
+            elementos_preceptor.append(f'http://127.0.0.1:8000/api/elementos/{elemento.id}/')
         return elementos_preceptor
 
 
@@ -129,11 +129,7 @@ class RoteiroSerializer(serializers.ModelSerializer):
 
 class PacienteSerializer(serializers.ModelSerializer):
 
-    atendimentos = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='atendimento-detail'
-    )
+    atendimentos = serializers.SerializerMethodField()
 
     class Meta:
         model = Paciente
@@ -143,6 +139,10 @@ class PacienteSerializer(serializers.ModelSerializer):
             'nome',
             'atendimentos'
         ]
+
+    def get_atendimentos(self, obj):
+        elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
+        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
 
 
 class AtendimentoSerializer(serializers.ModelSerializer):

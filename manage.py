@@ -1,6 +1,10 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from django.core.management.commands.runserver import Command as runserver
+from conf.utils import get_server_ip
+
+runserver.default_addr = f"{get_server_ip()}"
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'conf.settings')
