@@ -1,8 +1,7 @@
-from pathlib import Path
 import os
+from .utils import get_server_ip
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 SECRET_KEY = 'i*)z0c3x=r#g&cyc1@zdp784uc$f*=2$rfz$)%d-0fvfnj_%on'
 
@@ -10,9 +9,8 @@ DEBUG = True
 
 # TODO adicionar host do heroku ('amigos-do-produtor.herokuapp.com')
 ALLOWED_HOSTS = [
-    '0.0.0.0',
+    f'{get_server_ip()}',
     '127.0.0.1',
-    '10.0.2.2' 
 ]
 
 INSTALLED_APPS = [
@@ -100,13 +98,11 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, "acolher", "staticfiles")
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, "acolher", "media")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
