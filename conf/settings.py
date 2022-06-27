@@ -7,9 +7,8 @@ SECRET_KEY = 'i*)z0c3x=r#g&cyc1@zdp784uc$f*=2$rfz$)%d-0fvfnj_%on'
 
 DEBUG = True
 
-# TODO adicionar host do heroku ('amigos-do-produtor.herokuapp.com')
 ALLOWED_HOSTS = [
-    f'{get_server_ip()}',
+    'server-ivo.herokuapp.com',
     '127.0.0.1',
 ]
 
