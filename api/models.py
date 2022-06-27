@@ -10,7 +10,7 @@ from rest_framework.authtoken.models import Token
 
 class Preceptor(AbstractUser):
     ocupacao = models.CharField(max_length=255)
-    avatar = models.ImageField(upload_to='preceptor_avatar')
+    avatar = models.ImageField(upload_to='preceptor_avatar', null = True)
 
     class Meta:
         ordering = ['id']

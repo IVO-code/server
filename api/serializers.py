@@ -32,7 +32,7 @@ class PreceptorSerializer(serializers.ModelSerializer):
         elementos_preceptor = []
         elementos = ElementoComunicativo.objects.filter(preceptor_id=obj.id)
         for elemento in elementos:
-            elementos_preceptor.append(f'http://127.0.0.1:8000/api/elementos/{elemento.id}/')
+            elementos_preceptor.append(f'http://locahost:8000/api/elementos/{elemento.id}/')
         return elementos_preceptor
 
 
