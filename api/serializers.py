@@ -19,6 +19,7 @@ class PreceptorSerializer(serializers.ModelSerializer):
             'id',
             'ocupacao',
             'username',
+            'avatar',
             'email',
             'password',
             'elementos_comunicativos'
@@ -27,7 +28,7 @@ class PreceptorSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
-    def get_elementos_comunicativos(self, obj): 
+    def get_elementos_comunicativos(self, obj):
         elementos_preceptor = []
         elementos = ElementoComunicativo.objects.filter(preceptor_id=obj.id)
         for elemento in elementos:
@@ -74,7 +75,7 @@ class CardSerializer(serializers.ModelSerializer):
             'ativo': {'read_only': True},
             'data': {'read_only': True}
         }
-    
+
     def get_titulo(self, obj):
         elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
         return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
@@ -84,9 +85,11 @@ class CardSerializer(serializers.ModelSerializer):
         return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
 
     def get_opcoes(self, obj):
-        pass
-
-    
+        final_opcoes = []
+        opcoes = ElementoComunicativo.objects.filter(card_opcao__id=obj.id)
+        for opcao in opcoes:
+            final_opcoes.append(f'http://127.0.0.1:8000/api/elementos/{opcao.id}/')
+        return final_opcoes
 
 
 class RoteiroSerializer(serializers.ModelSerializer):
@@ -95,7 +98,7 @@ class RoteiroSerializer(serializers.ModelSerializer):
 
     descricao = serializers.SerializerMethodField()
 
-    opcoes = serializers.SerializerMethodField()
+    cards = serializers.SerializerMethodField()
 
     class Meta:
         model = Roteiro
@@ -108,14 +111,25 @@ class RoteiroSerializer(serializers.ModelSerializer):
             'cards'
         ]
 
+    def get_titulo(self, obj):
+        elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
+        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
+
+    def get_descricao(self, obj):
+        elemento = ElementoComunicativo.objects.filter(id=obj.descricao_id).first()
+        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
+
+    def get_cards(self, obj):
+        final_cards = []
+        cards = Card.objects.filter(roteiro_cards__id=obj.id)
+        for card in cards:
+            final_cards.append(f'http://127.0.0.1:8000/api/elementos/{card.id}/')
+        return final_cards
+
 
 class PacienteSerializer(serializers.ModelSerializer):
 
-    atendimentos = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='atendimento-detail'
-    )
+    atendimentos = serializers.SerializerMethodField()
 
     class Meta:
         model = Paciente
@@ -125,6 +139,10 @@ class PacienteSerializer(serializers.ModelSerializer):
             'nome',
             'atendimentos'
         ]
+
+    def get_atendimentos(self, obj):
+        elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
+        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
 
 
 class AtendimentoSerializer(serializers.ModelSerializer):
@@ -139,6 +157,3 @@ class AtendimentoSerializer(serializers.ModelSerializer):
             'card',
             'opcao'
         ]
-
-
-

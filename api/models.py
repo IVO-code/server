@@ -10,6 +10,7 @@ from rest_framework.authtoken.models import Token
 
 class Preceptor(AbstractUser):
     ocupacao = models.CharField(max_length=255)
+    avatar = models.ImageField(upload_to='preceptor_avatar')
 
     class Meta:
         ordering = ['id']
@@ -140,6 +141,3 @@ class Atendimento(models.Model):
         ordering = ['id']
         verbose_name = 'atendimento'
         verbose_name_plural = 'atendimento'
-
-    def __str__(self):
-        return f'{self.texto} - {self.paciente.nome}'

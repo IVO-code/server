@@ -1,6 +1,6 @@
 from rest_framework.authtoken.models import Token
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets
 
 from rest_framework.response import Response
@@ -8,9 +8,10 @@ from rest_framework import status
 
 from .models import Atendimento, Card, ElementoComunicativo, Paciente, Preceptor, Roteiro
 from .serializers import PreceptorSerializer, CardSerializer, RoteiroSerializer, AtendimentoSerializer, ElementoComunicativoSerializer, PacienteSerializer, AutenticacaoSerializer
-
+from .permissions import UserLoginPermission
 
 @api_view(['POST'])
+@permission_classes([UserLoginPermission])
 def login(request, format=None):
 
     if request.method == 'POST':
