@@ -8,7 +8,7 @@ SECRET_KEY = 'i*)z0c3x=r#g&cyc1@zdp784uc$f*=2$rfz$)%d-0fvfnj_%on'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'git.heroku.com',
+    'ivo-server-test.herokuapp.com',
     '127.0.0.1',
 ]
 
