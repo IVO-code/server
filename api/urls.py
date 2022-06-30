@@ -17,7 +17,6 @@ router.register(r'atendimentos', AtendimentoViewSet, basename='atendimentos')
 
 urlpatterns = [
     path('login/', login),
-    static("media/", document_root=settings.MEDIA_ROOT)
-    ]
+    ] + static('media/', document_root=settings.MEDIA_ROOT)
 
 urlpatterns += router.urls
