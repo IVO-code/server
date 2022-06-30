@@ -19,7 +19,7 @@ def login(request, format=None):
         resultado = Preceptor.objects.filter(username=login.data['usuario']).filter(password=login.data['senha'])
         if len(resultado) == 1:
            token = Token.objects.get(user_id=resultado[0].id)
-           return Response({"token": token.key}, status=status.HTTP_202_ACCEPTED)
+           return Response({"token": token.key, "id": resultado[0].id}, status=status.HTTP_202_ACCEPTED)
         else: return Response({"erro": "erro de usuario ou senha"}, status=status.HTTP_406_NOT_ACCEPTABLE)
     else: return Response(status=status.HTTP_400_BAD_REQUEST)
 
