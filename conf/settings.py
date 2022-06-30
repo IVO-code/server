@@ -99,7 +99,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "acolher", "staticfiles")
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "acolher", "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+USER_MEDIA_ROOT = os.path.join(BASE_DIR, "api", "preceptores", "media", "preceptor_avatar")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
