@@ -1,10 +1,14 @@
 from rest_framework.authtoken.models import Token
 
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework import viewsets
 
 from rest_framework.response import Response
 from rest_framework import status
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 from .models import Atendimento, Card, ElementoComunicativo, Paciente, Preceptor, Roteiro
 from .serializers import PreceptorSerializer, CardSerializer, RoteiroSerializer, AtendimentoSerializer, ElementoComunicativoSerializer, PacienteSerializer, AutenticacaoSerializer
@@ -27,12 +31,29 @@ def login(request, format=None):
 class PreceptorViewSet(viewsets.ModelViewSet):
     queryset = Preceptor.objects.all()
     serializer_class = PreceptorSerializer
+
+    @action(detail=True, methods=["post"], url_path='upload_avatar')
+    def upload_avatar(self, request, pk=None):
+        user = Preceptor.objects.filter(id=pk).get()
+        avatar = request.data.get('picture')
+        upload_data = cloudinary.uploader.upload(avatar)
+        user.avatar = upload_data['url']
+        user.save()
+        return Response(status=status.HTTP_200_OK)
     
 
 class ElementoComunicativoViewSet(viewsets.ModelViewSet):
     queryset = ElementoComunicativo.objects.all()
     serializer_class = ElementoComunicativoSerializer
 
+    @action(detail=True, methods=["post"], url_path='upload_figure')
+    def upload_figure(self, request, pk=None):
+        elemento = ElementoComunicativo.objects.filter(id=pk).get()
+        avatar = request.data.get('picture')
+        upload_data = cloudinary.uploader.upload(avatar)
+        elemento.figura = upload_data['url']
+        elemento.save()
+        return Response(status=status.HTTP_200_OK)
 
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()

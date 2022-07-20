@@ -18,3 +18,4 @@ urllib3==1.26.9
 zipp==3.8.0
 django_heroku==0.3.1
 gunicorn==19.9.0
+cloudinary==1.29.0

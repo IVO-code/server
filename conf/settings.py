@@ -1,6 +1,10 @@
 import os
 from .utils import get_server_ip
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'i*)z0c3x=r#g&cyc1@zdp784uc$f*=2$rfz$)%d-0fvfnj_%on'
@@ -19,13 +23,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'cloudinary',
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
 
     'api',
 ]
+
+cloudinary.config( 
+  cloud_name = "ivo-code", 
+  api_key = "497719387426647", 
+  api_secret = "Z_4EdvZzqLn_MlOkD6IrVBFXDAE" 
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
