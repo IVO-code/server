@@ -66,10 +66,11 @@ class CardViewSet(viewsets.ModelViewSet):
     serializer_class = CardSerializer
 
     def create(self, request):
-        card = Card.objects.create()
-        card = Card()
-        card.titulo = ElementoComunicativo.objects.get(pk=request.data['titulo'])
-        card.descricao = ElementoComunicativo.objects.get(pk=request.data['descricao'])
+        card = Card.objects.create(Card(
+            titulo= ElementoComunicativo.objects.get(pk=request.data['titulo']),
+            descricao= ElementoComunicativo.objects.get(pk=request.data['descricao'])
+        ))
+
         card.opcoes.set(ElementoComunicativo.objects.filter(pk__in=request.data['opcoes']))
         card.save()
 
