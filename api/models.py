@@ -57,18 +57,22 @@ class Card(models.Model):
 
     titulo = models.ForeignKey(
         ElementoComunicativo,
+        null=True,
         related_name='card_titulo_elemento',
+        
         on_delete=models.DO_NOTHING
     )
 
     descricao = models.ForeignKey(
         ElementoComunicativo,
+        null=True,
         related_name='card_descricao_elemento',
         on_delete=models.DO_NOTHING
     )
 
     opcoes = models.ManyToManyField(
         ElementoComunicativo,
+        null=True,
         related_name='card_opcao'
     )
 
