@@ -82,7 +82,7 @@ class Card(models.Model):
         verbose_name_plural = 'cards'
 
     def __str__(self):
-        return f'{self.titulo.texto}'
+        return f'{self.titulo}'
 
 
 class Roteiro(models.Model):
