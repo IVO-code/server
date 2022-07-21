@@ -33,6 +33,7 @@ class ElementoComunicativo(models.Model):
     libras = models.URLField()
     audioDescricao = models.URLField()
     data = models.DateTimeField(auto_now_add=True)
+    tipo = models.BooleanField()
 
     preceptor = models.ForeignKey(
         Preceptor,

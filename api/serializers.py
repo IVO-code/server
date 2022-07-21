@@ -48,7 +48,8 @@ class ElementoComunicativoSerializer(serializers.ModelSerializer):
             'figura',
             'libras',
             'audioDescricao',
-            'data'
+            'data',
+            'tipo'
         ]
 
 
