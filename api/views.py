@@ -1,4 +1,3 @@
-from http.client import HTTPResponse
 from rest_framework.authtoken.models import Token
 
 from rest_framework.decorators import api_view, permission_classes, action
@@ -73,8 +72,7 @@ class CardViewSet(viewsets.ModelViewSet):
         
         card.opcoes.set(ElementoComunicativo.objects.filter(pk__in=request.data['opcoes']))
         card.save()
-        return HTTPResponse(status=status.HTTP_201_CREATED)
-        
+        return Response(status=status.HTTP_200_OK)
 
 
 
