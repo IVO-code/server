@@ -73,7 +73,8 @@ class CardViewSet(viewsets.ModelViewSet):
         
         card.opcoes.set(ElementoComunicativo.objects.filter(pk__in=request.data['opcoes']))
         card.save()
-        return HTTPResponse(card, status=status.HTTP_201_CREATED)
+        return HTTPResponse(status=status.HTTP_201_CREATED)
+        
 
 
 
