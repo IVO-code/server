@@ -79,18 +79,21 @@ class CardSerializer(serializers.ModelSerializer):
 
     def get_titulo(self, obj):
         elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
-        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
+        if(elemento != None):
+            return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
 
     def get_descricao(self, obj):
         elemento = ElementoComunicativo.objects.filter(id=obj.descricao_id).first()
-        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
+        if(elemento != None):
+            return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
 
     def get_opcoes(self, obj):
         final_opcoes = []
         opcoes = ElementoComunicativo.objects.filter(card_opcao__id=obj.id)
-        for opcao in opcoes:
-            final_opcoes.append(f'http://127.0.0.1:8000/api/elementos/{opcao.id}/')
-        return final_opcoes
+        if(opcoes != None):
+            for opcao in opcoes:
+                final_opcoes.append(f'http://127.0.0.1:8000/api/elementos/{opcao.id}/')
+            return final_opcoes
 
 
 class RoteiroSerializer(serializers.ModelSerializer):
