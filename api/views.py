@@ -72,7 +72,8 @@ class CardViewSet(viewsets.ModelViewSet):
         
         card.opcoes.set(ElementoComunicativo.objects.filter(pk__in=request.data['opcoes']))
         card.save()
-        
+        return Response(status=status.HTTP_200_OK)
+
 
 
 class RoteiroViewSet(viewsets.ModelViewSet):
