@@ -67,8 +67,8 @@ class CardViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         card = Card()
-        card.titulo = ElementoComunicativo.objects.get(id=request.data['titulo']).id
-        card.descricao = ElementoComunicativo.objects.get(id=request.data['descricao']).id
+        card.titulo = ElementoComunicativo.objects.get(id=request.data['titulo'])
+        card.descricao = ElementoComunicativo.objects.get(id=request.data['descricao'])
         card.opcoes.set(ElementoComunicativo.objects.filter(pk__in=request.data['opcoes']))
         card.save()
 
