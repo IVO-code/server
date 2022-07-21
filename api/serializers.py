@@ -81,13 +81,13 @@ class CardSerializer(serializers.ModelSerializer):
         elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
         if(elemento != None):
 #            return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
-            return elemento.id
+            return elemento
 
     def get_descricao(self, obj):
         elemento = ElementoComunicativo.objects.filter(id=obj.descricao_id).first()
         if(elemento != None):
 #           return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
-            return elemento.id
+            return elemento
 
     def get_opcoes(self, obj):
         final_opcoes = []
