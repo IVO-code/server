@@ -55,7 +55,7 @@ class ElementoComunicativoViewSet(viewsets.ModelViewSet):
         elemento.save()
         return Response(status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=["post"], url_path='type')
+    @action(detail=True, methods=["get"], url_path='type')
     def get_by_type(self, request, tipo=None):
         elementos = ElementoComunicativo.objects.filter(tipo=tipo)
         return elementos
