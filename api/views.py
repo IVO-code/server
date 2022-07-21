@@ -64,11 +64,11 @@ class ElementoComunicativoViewSet(viewsets.ModelViewSet):
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    
+
     def create(self, request):
         card = Card(
             titulo = ElementoComunicativo.objects.filter(pk=request.data['titulo']).get(),
-            descricao = ElementoComunicativo.objects.filter(pk=request.data['descricao'].get()),
+            descricao = ElementoComunicativo.objects.filter(pk=request.data['descricao']).get(),
             opcoes = list(ElementoComunicativo.objects.filter(pk__in=request.data['opcoes']))
         )
         card.save()
