@@ -66,6 +66,8 @@ class CardViewSet(viewsets.ModelViewSet):
     serializer_class = CardSerializer
 
     def create(self, request):
+        print(request.data['titulo'])
+        print(ElementoComunicativo.objects.get(id=request.data['titulo']))
         card = Card(
             titulo = ElementoComunicativo.objects.get(id=request.data['titulo']),
             descricao = ElementoComunicativo.objects.get(id=request.data['descricao']),
