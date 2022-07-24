@@ -1,31 +1,23 @@
-from rest_framework.authtoken.models import Token
-
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework import viewsets
-
 from rest_framework.response import Response
 from rest_framework import status
-
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 
 from .models import Atendimento, Card, ElementoComunicativo, Paciente, Preceptor, Roteiro
 from .serializers import PreceptorSerializer, CardSerializer, RoteiroSerializer, AtendimentoSerializer, ElementoComunicativoSerializer, PacienteSerializer, AutenticacaoSerializer
 from .permissions import UserLoginPermission
+from .service import CardService, PreceptorService, ElementoComunicativoService, RoteiroService
+from .utils import checkresult
 
 @api_view(['POST'])
 @permission_classes([UserLoginPermission])
 def login(request, format=None):
-
-    if request.method == 'POST':
-        login = AutenticacaoSerializer(request.data)
-        resultado = Preceptor.objects.filter(username=login.data['usuario']).filter(password=login.data['senha'])
-        if len(resultado) == 1:
-           token = Token.objects.get(user_id=resultado[0].id)
-           return Response({"token": token.key, "id": resultado[0].id}, status=status.HTTP_202_ACCEPTED)
-        else: return Response({"erro": "erro de usuario ou senha"}, status=status.HTTP_406_NOT_ACCEPTABLE)
-    else: return Response(status=status.HTTP_400_BAD_REQUEST)
+    login = AutenticacaoSerializer(request.data)
+    result = PreceptorService.check_user_credentials(login)
+    if checkresult(result):
+        return Response({"token": result['token'], "id": result['user_id']}, status=status.HTTP_202_ACCEPTED)
+    else:
+        return Response({"erro": "erro de usuario ou senha"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 class PreceptorViewSet(viewsets.ModelViewSet):
@@ -34,11 +26,8 @@ class PreceptorViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], url_path='upload_avatar')
     def upload_avatar(self, request, pk=None):
-        user = Preceptor.objects.filter(id=pk).get()
         avatar = request.data.get('picture')
-        upload_data = cloudinary.uploader.upload(avatar)
-        user.avatar = upload_data['url']
-        user.save()
+        PreceptorService.upload_avatar(pk, avatar)
         return Response(status=status.HTTP_200_OK)
     
 
@@ -48,17 +37,9 @@ class ElementoComunicativoViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], url_path='upload_figure')
     def upload_figure(self, request, pk=None):
-        elemento = ElementoComunicativo.objects.filter(id=pk).get()
-        avatar = request.data.get('picture')
-        upload_data = cloudinary.uploader.upload(avatar)
-        elemento.figura = upload_data['url']
-        elemento.save()
+        figure = request.data.get('picture')
+        ElementoComunicativoService.upload_figure(pk, figure)
         return Response(status=status.HTTP_200_OK)
-
-    @action(detail=True, methods=["get"], url_path='type')
-    def get_by_type(self, request, tipo=None):
-        elementos = ElementoComunicativo.objects.filter(tipo=tipo)
-        return elementos
 
 
 class CardViewSet(viewsets.ModelViewSet):
@@ -66,19 +47,25 @@ class CardViewSet(viewsets.ModelViewSet):
     serializer_class = CardSerializer
 
     def create(self, request):
-        card = Card.objects.create()
-        card.titulo= ElementoComunicativo.objects.get(pk=request.data['titulo'])
-        card.descricao= ElementoComunicativo.objects.get(pk=request.data['descricao'])
-        
-        card.opcoes.set(ElementoComunicativo.objects.filter(pk__in=request.data['opcoes']))
-        card.save()
-        return Response(status=status.HTTP_200_OK)
-
+        titulo = ElementoComunicativoService.find_elemento_by_id(request.data['titulo'])
+        descricao = ElementoComunicativoService.find_elemento_by_id(request.data['descricao'])
+        opcoes = list(ElementoComunicativoService.find_elemento_by_id_list(request.data['opcoes']))
+        result = CardService.create_card(titulo, descricao, opcoes)
+        serializer = self.get_serializer(result)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class RoteiroViewSet(viewsets.ModelViewSet):
     queryset = Roteiro.objects.all()
     serializer_class = RoteiroSerializer
+
+    def create(self, request):
+        titulo = ElementoComunicativoService.find_elemento_by_id(request.data['titulo'])
+        descricao = ElementoComunicativoService.find_elemento_by_id(request.data['descricao'])
+        cards = list(CardService.find_cards_by_list(request.data['cards']))
+        result = RoteiroService.create_roteiro(titulo, descricao, cards)
+        serializer = self.get_serializer(result)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class AtendimentoViewSet(viewsets.ModelViewSet):

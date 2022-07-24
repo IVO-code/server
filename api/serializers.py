@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
+from .service import CardService, ElementoComunicativoService
 from .models import Atendimento, Card, Paciente, Preceptor, Roteiro, ElementoComunicativo
 
+from .utils import checkresult
 
 class AutenticacaoSerializer(serializers.Serializer):
     usuario = serializers.CharField()
@@ -80,13 +82,11 @@ class CardSerializer(serializers.ModelSerializer):
     def get_titulo(self, obj):
         elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
         if(elemento != None):
-#            return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
             return elemento.id
 
     def get_descricao(self, obj):
         elemento = ElementoComunicativo.objects.filter(id=obj.descricao_id).first()
         if(elemento != None):
-#           return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
             return elemento.id
 
     def get_opcoes(self, obj):
@@ -94,7 +94,6 @@ class CardSerializer(serializers.ModelSerializer):
         opcoes = ElementoComunicativo.objects.filter(card_opcao__id=obj.id)
         if(opcoes != None):
             for opcao in opcoes:
-#                final_opcoes.append(f'http://127.0.0.1:8000/api/elementos/{opcao.id}/')
                 final_opcoes.append(opcao.id)
             return final_opcoes
 
@@ -102,9 +101,7 @@ class CardSerializer(serializers.ModelSerializer):
 class RoteiroSerializer(serializers.ModelSerializer):
 
     titulo = serializers.SerializerMethodField()
-
     descricao = serializers.SerializerMethodField()
-
     cards = serializers.SerializerMethodField()
 
     class Meta:
@@ -112,26 +109,23 @@ class RoteiroSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'ativo',
-            'titulo',
             'data',
+            'titulo',
             'descricao',
             'cards'
         ]
 
     def get_titulo(self, obj):
-        elemento = ElementoComunicativo.objects.filter(id=obj.titulo_id).first()
-        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
+        result = ElementoComunicativoService.find_elemento_by_id(obj.titulo_id)
+        return result.id  
 
     def get_descricao(self, obj):
-        elemento = ElementoComunicativo.objects.filter(id=obj.descricao_id).first()
-        return f'http://127.0.0.1:8000/api/elementos/{elemento.id}/'
+        result = ElementoComunicativoService.find_elemento_by_id(obj.descricao_id)
+        return result.id
 
     def get_cards(self, obj):
-        final_cards = []
-        cards = Card.objects.filter(roteiro_cards__id=obj.id)
-        for card in cards:
-            final_cards.append(f'http://127.0.0.1:8000/api/elementos/{card.id}/')
-        return final_cards
+        result = CardService.find_cards_by_roteiro_id(obj.id)
+        return [card.id for card in result]
 
 
 class PacienteSerializer(serializers.ModelSerializer):

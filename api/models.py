@@ -10,7 +10,7 @@ from rest_framework.authtoken.models import Token
 
 class Preceptor(AbstractUser):
     ocupacao = models.CharField(max_length=255)
-    avatar = models.URLField()
+    avatar = models.URLField(null=True)
 
     class Meta:
         ordering = ['id']
@@ -58,8 +58,7 @@ class Card(models.Model):
     titulo = models.ForeignKey(
         ElementoComunicativo,
         null=True,
-        related_name='card_titulo_elemento',
-        
+        related_name='card_titulo_elemento', 
         on_delete=models.DO_NOTHING
     )
 
@@ -72,7 +71,6 @@ class Card(models.Model):
 
     opcoes = models.ManyToManyField(
         ElementoComunicativo,
-        null=True,
         related_name='card_opcao'
     )
 
@@ -80,10 +78,7 @@ class Card(models.Model):
         ordering = ['id']
         verbose_name = 'card'
         verbose_name_plural = 'cards'
-
-    def __str__(self):
-        return f'{self.titulo}'
-
+        
 
 class Roteiro(models.Model):
     ativo = models.BooleanField(default=True)
@@ -92,12 +87,14 @@ class Roteiro(models.Model):
     titulo = models.ForeignKey(
         ElementoComunicativo,
         related_name='roteiro_titulo_elemento',
+        null=True,
         on_delete=models.DO_NOTHING
     )
 
     descricao = models.ForeignKey(
         ElementoComunicativo,
         related_name='roteiro_descricao_elemento',
+        null=True,
         on_delete=models.DO_NOTHING
     )
 
@@ -110,9 +107,6 @@ class Roteiro(models.Model):
         ordering = ['id']
         verbose_name = 'roteiro'
         verbose_name_plural = 'roteiros'
-
-    def __str__(self):
-        return f'{self.titulo.texto}'
 
 
 class Paciente(models.Model):
